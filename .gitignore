@@ -1,2 +1,7 @@
 a.out
 /O
+main.cpp
+/bin/
+.todo
+game.cpp
+.gitignore
