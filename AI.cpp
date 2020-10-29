@@ -7,8 +7,41 @@
 #define AI_MODE 7
 
 AI::AI(){
+	if(AI_MODE&7){
+		if(!readfile(&played, "./bin/games_played.bin", sizeof(int))){
+			played = 0;
+			std::cout << "Count file not found." << std::endl;
+		}
+		if(getfilesize("./bin/highscore_replay.bin")>0){
+			int file_size = getfilesize("./bin/highscore_replay.bin");
+			int block_size = (sizeof(int)*SIZE+sizeof(int));
+			for(int a = 0; a < (file_size/block_size); a++){
+				game* buf = new game;
+				int point_buf;
+				int board_buf[4];
+				if(readfile(board_buf, "./bin/highscore_replay.bin", a*block_size, sizeof(int)*SIZE)){
+					buf->set_board(board_buf);
+				}
+				else{
+					std::cout << "Read highscore error." << std::endl;
+				}
+				if(readfile(&point_buf, "./bin/highscore_replay.bin", a*block_size+sizeof(int)*SIZE, sizeof(int))){
+					buf->add_points(point_buf);
+				}
+				else{
+					std::cout << "Read highscore error." << std::endl;
+				
+				}
+				top_history.push_back(buf);
+			}
+		}
+		else{
+			std::cout << "highscore not found." << std::endl;
+		}
+		std::cout << "AI MODE: ";
+	}
 	if(AI_MODE&1){		//	line open.
-		std::cout << "1" << std::endl;
+		std::cout << "line ";
 		line_in = new double[1<<16];
 		line_out = new double[1<<16];
 		if(!readfile(line_in, "./bin/line_in.bin", (1<<19))){
@@ -25,7 +58,7 @@ AI::AI(){
 		}
 	}
 	if(AI_MODE&2){		//	axe open.
-		std::cout << "2" << std::endl;
+		std::cout << "axe ";
 		axe_in = new double[1<<24];
 		axe_out = new double[1<<24];
 		if(!readfile(axe_in, "./bin/axe_in.bin", (1<<27))){
@@ -42,7 +75,7 @@ AI::AI(){
 		}
 	}
 	if(AI_MODE&4){		//	box open.
-		std::cout << "4" << std::endl;
+		std::cout << "box";
 		box_corn = new double[1<<16];
 		box_side = new double[1<<16];
 		box_cent = new double[1<<16];
@@ -65,13 +98,7 @@ AI::AI(){
 			std::cout << "File not found." << std::endl;
 		}
 	}
-	if(AI_MODE&7){
-		std::cout << "AI ON" << std::endl;
-		if(!readfile(&played, "./bin/games_played.bin", sizeof(int))){
-			played = 0;
-			std::cout << "File not found." << std::endl;
-		}
-	}
+	std::cout << std::endl;
 }
 
 AI::~AI(){
@@ -122,9 +149,16 @@ void AI::save(){
 		}
 	}
 	if(AI_MODE&7){
-		std::cout << "AI ON" << std::endl;
 		if(!savefile(&played, "./bin/games_played.bin", sizeof(int))){
 			std::cout << "File save error!" << std::endl;
+		}
+		for(int a = 0; a < top_history.size(); a++){
+			if(!appendfile(top_history[a]->board_pointer(), "./bin/highscore_replay.bin", sizeof(int)*SIZE)){
+				std::cout << "File save error!" << std::endl;
+			}
+			if(!appendfile(top_history[a]->points_pointer(), "./bin/highscore_replay.bin", sizeof(int))){
+				std::cout << "File save error!" << std::endl;
+			}
 		}
 	}
 }
@@ -132,6 +166,18 @@ void AI::save(){
 bool AI::savefile(void* data_ptr, std::string filename, int size){
 	std::fstream outfile;
 	outfile.open(filename, std::ios::out|std::ios::binary);
+	if(outfile.is_open()){
+		outfile.write((char*)data_ptr, size);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+bool AI::appendfile(void* data_ptr, std::string filename, int size){
+	std::fstream outfile;
+	outfile.open(filename, std::ios::out|std::ios::binary|std::ios::app);
 	if(outfile.is_open()){
 		outfile.write((char*)data_ptr, size);
 		return true;
@@ -150,6 +196,30 @@ bool AI::readfile(void* data_ptr, std::string filename, int size){
 	}
 	else{
 		return false;
+	}
+}
+
+bool AI::readfile(void* data_ptr, std::string filename, const unsigned int start, const int size){
+	std::fstream infile;
+	infile.open(filename, std::ios::in|std::ios::binary);
+	if(infile.is_open()){
+		infile.seekg(start);
+		infile.read((char*)data_ptr, size);
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+int AI::getfilesize(std::string filename){
+	std::fstream infile;
+	infile.open(filename, std::ios::in|std::ios::binary|std::ios::ate);
+	if(infile.is_open()){
+		return infile.tellg();
+	}
+	else{
+		return -1;
 	}
 }
 
@@ -362,8 +432,8 @@ void AI::update(){
 void AI::clear_status(){
 	total_points = 0;
 	runtime_played = 0;
-	free_history(top_history);
-	top_history.clear();
+	//free_history(top_history);
+	//top_history.clear();
 	return;
 }
 

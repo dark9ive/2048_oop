@@ -66,6 +66,19 @@ int game::show_points(){
 	return points;
 }
 
+void game::set_board(int* source){
+	memcpy(board, source, sizeof(int)*SIZE);
+	return;
+}
+
+int* game::board_pointer(){
+	return board;
+}
+
+int* game::points_pointer(){
+	return &points;
+}
+
 int game::up(){
 	int row[SIZE] = {0};
 	int returnval = 0;
