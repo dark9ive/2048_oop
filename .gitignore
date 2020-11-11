@@ -1,11 +1,6 @@
-a.out
-<<<<<<< HEAD
-O
-=======
-/O
-main.cpp
-/bin*/
-.todo
-game.cpp
->>>>>>> 4e2bbe7d9b14d27482b83f9c2f551eff51d756de
 .gitignore
+bin
+Game.out
+Replay.out
+Train.out
+O
