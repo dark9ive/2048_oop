@@ -3,6 +3,7 @@
 #include<iostream>
 #include<vector>
 #include<math.h>
+#include<climits>
 #include"framework.h"
 #define SIZE 4
 
@@ -43,13 +44,39 @@ void Init(){
 
 game::game(){
 	board = new int[SIZE];
+	for(int a = 0; a < 4; a++){
+		board[a] = 0;
+	}
+	points = 0;
 	for(int a = 0; a < 2; a++){	//	Initialize with two blocks;
 		new_block();
 	}
 }
+game::game(const game &previous){
+	board = new int[SIZE];
+	points = previous.points;
+	memcpy(board, previous.board, sizeof(int)*SIZE);
+}
 
 game::~game(){
 	delete [] board;
+}
+
+int game::show_points(){
+	return points;
+}
+
+void game::set_board(int* source){
+	memcpy(board, source, sizeof(int)*SIZE);
+	return;
+}
+
+int* game::board_pointer(){
+	return board;
+}
+
+int* game::points_pointer(){
+	return &points;
 }
 
 int game::up(){
@@ -229,6 +256,108 @@ void game::new_block(){		//	To maximum the efficiency, do &0x7 instead of mod 10
 		}
 		return;
 	}
+}
+
+void game::get_line_index(int* array){
+	int positive[8] = {0};
+	//int negative[8] = {0};
+	for(int a = 0; a < 4; a++){
+		positive[2] += (((board[a]>>(0*4))&0xF)<<(4*a));
+		positive[3] += (((board[a]>>(3*4))&0xF)<<(4*a));
+		positive[6] += (((board[a]>>(1*4))&0xF)<<(4*a));
+		positive[7] += (((board[a]>>(2*4))&0xF)<<(4*a));
+		/*
+		negative[0] += (((board[0]>>(4*a))&0xF)<<(4*(4-1-a)));
+		negative[1] += (((board[3]>>(4*a))&0xF)<<(4*(4-1-a)));
+		negative[4] += (((board[1]>>(4*a))&0xF)<<(4*(4-1-a)));
+		negative[5] += (((board[2]>>(4*a))&0xF)<<(4*(4-1-a)));
+		negative[2] += (((board[4-1-a]>>(0*4))&0xF)<<(4*a));
+		negative[3] += (((board[4-1-a]>>(3*4))&0xF)<<(4*a));
+		negative[6] += (((board[4-1-a]>>(1*4))&0xF)<<(4*a));
+		negative[7] += (((board[4-1-a]>>(2*4))&0xF)<<(4*a));
+		*/
+	}
+	positive[0] = board[0];
+	positive[1] = board[3];
+	positive[4] = board[1];
+	positive[5] = board[2];
+	for(int a = 0; a < 8; a++){
+		//array[a] = std::min(positive[a], negative[a]);
+		array[a] = positive[a];
+	}
+	return;
+}
+
+void game::get_axe_index(int* array){
+	int array2d[4][4];
+	for(int a = 0; a < 4; a++){
+		for(int b = 0; b < 4; b++){
+			array2d[a][b] = (board[a]>>(4*b))&0xF;
+		}
+	}
+	array[0] = (array2d[0][3]<<(4*0)) + (array2d[0][2]<<(4*1)) + (array2d[0][1]<<(4*2)) + (array2d[0][0]<<(4*3)) + (array2d[1][0]<<(4*4)) + (array2d[1][1]<<(4*5));
+	array[1] = (array2d[0][0]<<(4*0)) + (array2d[0][1]<<(4*1)) + (array2d[0][2]<<(4*2)) + (array2d[0][3]<<(4*3)) + (array2d[1][3]<<(4*4)) + (array2d[1][2]<<(4*5));
+	array[2] = (array2d[3][3]<<(4*0)) + (array2d[3][2]<<(4*1)) + (array2d[3][1]<<(4*2)) + (array2d[3][0]<<(4*3)) + (array2d[2][0]<<(4*4)) + (array2d[2][1]<<(4*5));
+	array[3] = (array2d[3][0]<<(4*0)) + (array2d[3][1]<<(4*1)) + (array2d[3][2]<<(4*2)) + (array2d[3][3]<<(4*3)) + (array2d[2][3]<<(4*4)) + (array2d[2][2]<<(4*5));
+
+	array[4] = (array2d[3][0]<<(4*0)) + (array2d[2][0]<<(4*1)) + (array2d[1][0]<<(4*2)) + (array2d[0][0]<<(4*3)) + (array2d[0][1]<<(4*4)) + (array2d[1][1]<<(4*5));
+	array[5] = (array2d[0][0]<<(4*0)) + (array2d[1][0]<<(4*1)) + (array2d[2][0]<<(4*2)) + (array2d[3][0]<<(4*3)) + (array2d[3][1]<<(4*4)) + (array2d[2][1]<<(4*5));
+	array[6] = (array2d[3][3]<<(4*0)) + (array2d[2][3]<<(4*1)) + (array2d[1][3]<<(4*2)) + (array2d[0][3]<<(4*3)) + (array2d[0][2]<<(4*4)) + (array2d[1][2]<<(4*5));
+	array[7] = (array2d[0][3]<<(4*0)) + (array2d[1][3]<<(4*1)) + (array2d[2][3]<<(4*2)) + (array2d[3][3]<<(4*3)) + (array2d[3][2]<<(4*4)) + (array2d[2][2]<<(4*5));
+
+	array[8] = (array2d[1][3]<<(4*0)) + (array2d[1][2]<<(4*1)) + (array2d[1][1]<<(4*2)) + (array2d[1][0]<<(4*3)) + (array2d[2][0]<<(4*4)) + (array2d[2][1]<<(4*5));
+	array[9] = (array2d[1][0]<<(4*0)) + (array2d[1][1]<<(4*1)) + (array2d[1][2]<<(4*2)) + (array2d[1][3]<<(4*3)) + (array2d[2][3]<<(4*4)) + (array2d[2][2]<<(4*5));
+	array[10] = (array2d[2][3]<<(4*0)) + (array2d[2][2]<<(4*1)) + (array2d[2][1]<<(4*2)) + (array2d[2][0]<<(4*3)) + (array2d[1][0]<<(4*4)) + (array2d[1][1]<<(4*5));
+	array[11] = (array2d[2][0]<<(4*0)) + (array2d[2][1]<<(4*1)) + (array2d[2][2]<<(4*2)) + (array2d[2][3]<<(4*3)) + (array2d[1][3]<<(4*4)) + (array2d[1][2]<<(4*5));
+
+	array[12] = (array2d[3][1]<<(4*0)) + (array2d[2][1]<<(4*1)) + (array2d[1][1]<<(4*2)) + (array2d[0][1]<<(4*3)) + (array2d[0][2]<<(4*4)) + (array2d[1][2]<<(4*5));
+	array[13] = (array2d[0][1]<<(4*0)) + (array2d[1][1]<<(4*1)) + (array2d[2][1]<<(4*2)) + (array2d[3][1]<<(4*3)) + (array2d[3][2]<<(4*4)) + (array2d[2][2]<<(4*5));
+	array[14] = (array2d[3][2]<<(4*0)) + (array2d[2][2]<<(4*1)) + (array2d[1][2]<<(4*2)) + (array2d[0][2]<<(4*3)) + (array2d[0][1]<<(4*4)) + (array2d[1][1]<<(4*5));
+	array[15] = (array2d[0][2]<<(4*0)) + (array2d[1][2]<<(4*1)) + (array2d[2][2]<<(4*2)) + (array2d[3][2]<<(4*3)) + (array2d[3][1]<<(4*4)) + (array2d[2][1]<<(4*5));
+	return;
+}
+
+void game::get_box_index(int* array){
+	int positive[8] = {0};
+	int negative[8] = {0};
+	int center[8] = {0};
+	array[8] = INT_MAX;
+	for(int a = 0; a < 4; a++){
+		positive[0] += (((board[0+a/2]>>(4*(0+a%2)))&0xF)<<(4*a));
+		positive[1] += (((board[0+a/2]>>(4*(3-a%2)))&0xF)<<(4*a));
+		positive[2] += (((board[3-a/2]>>(4*(0+a%2)))&0xF)<<(4*a));
+		positive[3] += (((board[3-a/2]>>(4*(3-a%2)))&0xF)<<(4*a));
+
+		positive[4] += (((board[0+a/2]>>(4*(1+a%2)))&0xF)<<(4*a));
+		positive[5] += (((board[1+a%2]>>(4*(3-a/2)))&0xF)<<(4*a));
+		positive[6] += (((board[3-a/2]>>(4*(2-a%2)))&0xF)<<(4*a));
+		positive[7] += (((board[2-a%2]>>(4*(0+a/2)))&0xF)<<(4*a));
+
+		negative[0] += (((board[0+a%2]>>(4*(0+a/2)))&0xF)<<(4*a));
+		negative[1] += (((board[0+a%2]>>(4*(3-a/2)))&0xF)<<(4*a));
+		negative[2] += (((board[3-a%2]>>(4*(0+a/2)))&0xF)<<(4*a));
+		negative[3] += (((board[3-a%2]>>(4*(3-a/2)))&0xF)<<(4*a));
+
+		negative[4] += (((board[0+a/2]>>(4*(2-a%2)))&0xF)<<(4*a));
+		negative[5] += (((board[2-a%2]>>(4*(3-a/2)))&0xF)<<(4*a));
+		negative[6] += (((board[3-a/2]>>(4*(1+a%2)))&0xF)<<(4*a));
+		negative[7] += (((board[1+a%2]>>(4*(0+a/2)))&0xF)<<(4*a));
+
+		center[0] += (((board[1+a/2]>>(4*(1+a%2)))&0xF)<<(4*a));
+		center[1] += (((board[1+a%2]>>(4*(1+a/2)))&0xF)<<(4*a));
+		center[2] += (((board[1+a/2]>>(4*(2-a%2)))&0xF)<<(4*a));
+		center[3] += (((board[1+a%2]>>(4*(2-a/2)))&0xF)<<(4*a));
+
+		center[4] += (((board[2-a/2]>>(4*(1+a%2)))&0xF)<<(4*a));
+		center[5] += (((board[2-a%2]>>(4*(1+a/2)))&0xF)<<(4*a));
+		center[6] += (((board[2-a/2]>>(4*(2-a%2)))&0xF)<<(4*a));
+		center[7] += (((board[2-a%2]>>(4*(2-a/2)))&0xF)<<(4*a));
+	}
+	for(int a = 0; a < 8; a++){
+		array[a] = std::min(positive[a], negative[a]);
+		array[8] = std::min(array[8], center[a]);
+	}
+	return;
 }
 
 void game::print(){

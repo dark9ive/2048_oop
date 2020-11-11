@@ -6,16 +6,21 @@ using namespace std;
 int main()
 {
 	game a;
-	a.print();
+	double start(clock());
 	Init();
+	double end(clock());
+	system("clear");
+	a.print();
+	cout << "init used time : " << (end - start) / CLOCKS_PER_SEC << " s" << endl;
+	cout << "Game Start!" << endl;
 	char b;
+	int step=0;
 	while (1)
 	{
-
 		int point = 0;
 		int c;
 		c = getch();
-		if (c == 27 || c == 119 || c == 115 || c == 100 || c == 97)
+		if (c == 27 || c == 119 || c == 115 || c == 100 || c == 97 || c == 113)
 		{
 			if (c == 27)
 			{
@@ -44,11 +49,15 @@ int main()
 						if (point == -1)
 						{
 							a.print();
+							cout << "Use \'Q\' to Leave Game." << endl;
+							cout<<"Step: "<<step<<endl;
 							continue;
 						}
 						a.add_points(point);
 						a.new_block();
 						a.print();
+						cout << "Use \'Q\' to Leave Game." << endl;
+						cout<<"Step: "<<step++<<endl;
 						if (a.isdead())
 							break;
 					}
@@ -71,22 +80,31 @@ int main()
 				case 97:
 					point = a.left();
 					break;
-				default:
-					break;
+				case 113:
+					a.print();
+					cout << "You quit this game. " << endl;
+					exit(0);
 				}
 				if (point == -1)
 				{
 					a.print();
+					cout << "Use \'Q\' to Leave Game. " << endl;
+					cout<<"Step: "<<step<<endl;
 					continue;
 				}
 				a.add_points(point);
 				a.new_block();
 				a.print();
+				cout << "Use \'Q\' to Leave Game." << endl;
+				cout<<"Step: "<<step++<<endl;
 				if (a.isdead())
 					break;
 			}
 		}
+		
 	}
+	system("clear");
+	a.print();
 	cout << "Game Over!!" << endl;
 	return 0;
 }
