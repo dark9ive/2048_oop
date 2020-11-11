@@ -1,6 +1,4 @@
 .gitignore
-bin
-Game.out
-Replay.out
-Train.out
-O
+bin/
+*.out
+O/
