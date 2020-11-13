@@ -17,5 +17,4 @@ split main.cpp to 3 function:
      Usage: ./Train.out <train-round>
    3. replay.cpp → Replay.out:
      Replay hightest score round when Training 
-​        
-
+​
