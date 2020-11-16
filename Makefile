@@ -14,5 +14,5 @@ demo.o: ./O/
 	mkdir ./bin
 clean:
 	rm -r ./O
-	rm ./a.out
+	rm ./*.out
 	rm ./bin/*.bin
