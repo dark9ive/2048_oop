@@ -6,6 +6,11 @@ This is our final project of OOP class ---- 2048 AI graphical.
 
 ## Version history
 
+### v1.6
+
+Simplify print board:
+   1. Create a new head -> BoardPrint.h
+   2. framework.cpp -> game::print() 
 
 ### v1.5
 

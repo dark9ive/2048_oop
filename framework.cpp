@@ -1,12 +1,12 @@
-#include<time.h>
-#include<stdlib.h>
-#include<iostream>
-#include<vector>
-#include<math.h>
-#include<climits>
-#include"framework.h"
+#include <time.h>
+#include <stdlib.h>
+#include <iostream>
+#include <vector>
+#include <math.h>
+#include <climits>
+#include "framework.h"
+#include "BoardPrint.h"
 #define SIZE 4
-
 int move_table[0x10<<(SIZE*4)] = {0};
 int get_points[0x10<<(SIZE*4)] = {0};
 
@@ -353,11 +353,11 @@ void game::print()
     std::cout << "Points: " << points << std::endl;
     for (int a = 0; a < SIZE; a++)
     {
-        printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+        printf(frame_color);
         std::cout << "------------";
     }
     std::cout << "--";
-    printf("\e[0m");
+    printf(clear_color);
     std::cout << std::endl;
     for (int a = 0; a < SIZE; a++)
     {
@@ -365,224 +365,62 @@ void game::print()
         {
             for (int b = 0; b < SIZE; b++)
             {
-                printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+                printf(frame_color);
                 std::cout << "||";
-                switch ((1 << ((board[a] >> b * 4) & 0xF)))
-                {
-                case 1:
-                    printf("\e[48;2;205;193;180m\e[38;2;119;110;101m");
-                    break;
-                case 2:
-                    printf("\e[48;2;238;228;218m\e[38;2;119;110;101m");
-                    break;
-                case 4:
-                    printf("\e[48;2;238;225;201m\e[38;2;119;110;101m");
-                    break;
-                case 8:
-                    printf("\e[48;2;243;178;122m\e[38;2;249;246;242m");
-                    break;
-                case 16:
-                    printf("\e[48;2;246;150;100m\e[38;2;249;246;242m");
-                    break;
-                case 32:
-                    printf("\e[48;2;247;124;95m\e[38;2;249;246;242m");
-                    break;
-                case 64:
-                    printf("\e[48;2;247;95;59m\e[38;2;249;246;242m");
-                    break;
-                case 128:
-                    printf("\e[48;2;237;208;115m\e[38;2;249;246;242m");
-                    break;
-                case 256:
-                    printf("\e[48;2;237;204;98m\e[38;2;249;246;242m");
-                    break;
-                case 512:
-                    printf("\e[48;2;237;201;80m\e[38;2;249;246;242m");
-                    break;
-                case 1024:
-                    printf("\e[48;2;237;197;63m\e[38;2;249;246;242m");
-                    break;
-                case 2048:
-                    printf("\e[48;2;237;194;46m\e[38;2;249;246;242m");
-                    break;
-                case 4096:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                case 8192:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                case 16384:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                case 32768:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                }
+				int two_power=((board[a] >> b * 4) & 0xF);
+				printf(num_color[two_power]);
                 std::cout << "          ";
             }
-            printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+            printf(frame_color);
             std::cout << "||";
-            printf("\e[0m");
+            printf(clear_color);
             std::cout << std::endl;
         }
         for (int b = 0; b < SIZE; b++)
         {
-            printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+            printf(frame_color);
             std::cout << "||";
-            switch ((1 << ((board[a] >> b * 4) & 0xF)))
-            {
-            case 1:
-                printf("\e[48;2;205;193;180m\e[38;2;119;110;101m");
-                std::cout << "     0    ";
-                break;
-            case 2:
-                printf("\e[48;2;238;228;218m\e[38;2;119;110;101m");
-                std::cout << "     " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 4:
-                printf("\e[48;2;238;225;201m\e[38;2;119;110;101m");
-                std::cout << "     " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 8:
-                printf("\e[48;2;243;178;122m\e[38;2;249;246;242m");
-                std::cout << "     " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 16:
-                printf("\e[48;2;246;150;100m\e[38;2;249;246;242m");
-                std::cout << "    " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 32:
-                printf("\e[48;2;247;124;95m\e[38;2;249;246;242m");
-                std::cout << "    " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 64:
-                printf("\e[48;2;247;95;59m\e[38;2;249;246;242m");
-                std::cout << "    " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 128:
-                printf("\e[48;2;237;208;115m\e[38;2;249;246;242m");
-                std::cout << "   " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 256:
-                printf("\e[48;2;237;204;98m\e[38;2;249;246;242m");
-                std::cout << "   " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 512:
-                printf("\e[48;2;237;201;80m\e[38;2;249;246;242m");
-                std::cout << "   " << (1 << ((board[a] >> b * 4) & 0xF)) << "    ";
-                break;
-            case 1024:
-                printf("\e[48;2;237;197;63m\e[38;2;249;246;242m");
-                std::cout << "   " << (1 << ((board[a] >> b * 4) & 0xF)) << "   ";
-                break;
-            case 2048:
-                printf("\e[48;2;237;194;46m\e[38;2;249;246;242m");
-                std::cout << "   " << (1 << ((board[a] >> b * 4) & 0xF)) << "   ";
-                break;
-            case 4096:
-                printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                std::cout << "   " << (1 << ((board[a] >> b * 4) & 0xF)) << "   ";
-                break;
-            case 8192:
-                printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                std::cout << "   " << (1 << ((board[a] >> b * 4) & 0xF)) << "   ";
-                break;
-            case 16384:
-                printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                std::cout << "  " << (1 << ((board[a] >> b * 4) & 0xF)) << "   ";
-                break;
-            case 32768:
-                printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                std::cout << "  " << (1 << ((board[a] >> b * 4) & 0xF)) << "   ";
-                break;
-            }
+			int two_power=((board[a] >> b * 4) & 0xF);
+			printf(num_color[two_power]);
+			printf(num_characters[two_power]);
         }
-        printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+        printf(frame_color);
         std::cout << "||";
-        printf("\e[0m");
+        printf(clear_color);
         std::cout << std::endl;
         for (int i = 0; i < 2; i++)
         {
             for (int b = 0; b < SIZE; b++)
             {
-                printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+                printf(frame_color);
                 std::cout << "||";
-                switch ((1 << ((board[a] >> b * 4) & 0xF)))
-                {
-                case 1:
-                    printf("\e[48;2;205;193;180m\e[38;2;119;110;101m");
-                    break;
-                case 2:
-                    printf("\e[48;2;238;228;218m\e[38;2;119;110;101m");
-                    break;
-                case 4:
-                    printf("\e[48;2;238;225;201m\e[38;2;119;110;101m");
-                    break;
-                case 8:
-                    printf("\e[48;2;243;178;122m\e[38;2;249;246;242m");
-                    break;
-                case 16:
-                    printf("\e[48;2;246;150;100m\e[38;2;249;246;242m");
-                    break;
-                case 32:
-                    printf("\e[48;2;247;124;95m\e[38;2;249;246;242m");
-                    break;
-                case 64:
-                    printf("\e[48;2;247;95;59m\e[38;2;249;246;242m");
-                    break;
-                case 128:
-                    printf("\e[48;2;237;208;115m\e[38;2;249;246;242m");
-                    break;
-                case 256:
-                    printf("\e[48;2;237;204;98m\e[38;2;249;246;242m");
-                    break;
-                case 512:
-                    printf("\e[48;2;237;201;80m\e[38;2;249;246;242m");
-                    break;
-                case 1024:
-                    printf("\e[48;2;237;197;63m\e[38;2;249;246;242m");
-                    break;
-                case 2048:
-                    printf("\e[48;2;237;194;46m\e[38;2;249;246;242m");
-                    break;
-                case 4096:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                case 8192:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                case 16384:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                case 32768:
-                    printf("\e[48;2;60;58;51m\e[38;2;249;246;242m");
-                    break;
-                }
+				int two_power=((board[a] >> b * 4) & 0xF);
+				printf(num_color[two_power]);
                 std::cout << "          ";
             }
-            printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+            printf(frame_color);
             std::cout << "||";
-            printf("\e[0m");
+            printf(clear_color);
             std::cout << std::endl;
         }
         if (a != SIZE - 1)
         {
             for (int b = 0; b < SIZE; b++)
             {
-                printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+                printf(frame_color);
                 std::cout << "||----------";
             }
             std::cout << "||";
-            printf("\e[0m");
+            printf(clear_color);
             std::cout << std::endl;
         }
     }
     for (int a = 0; a < SIZE; a++)
     {
-        printf("\e[48;2;187;173;160m\e[38;2;187;173;160m");
+        printf(frame_color);
         std::cout << "------------";
     }
     std::cout << "--";
-    printf("\e[0m");
+    printf(clear_color);
     std::cout << std::endl;
 }
