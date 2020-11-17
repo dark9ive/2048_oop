@@ -9,8 +9,8 @@ This is our final project of OOP class ---- 2048 AI graphical.
 ### v1.6
 
 Simplify print board:
-   1. Create a new head -> BoardPrint.h
-   2. framework.cpp -> game::print() 
+   1. Create a new head → BoardPrint.h
+   2. framework.cpp → game::print() 
 
 ### v1.5
 
@@ -20,10 +20,10 @@ We have termial game now!
 
 split main.cpp to 3 function:  
   
-​    1. main.cpp $\Rightarrow $ Game.out:
+​    1. main.cpp → Game.out:
 ​        Let user play 2048 Game.
-​    2. train.cpp $\Rightarrow $ Train.out:  
+​    2. train.cpp → Train.out:  
 ​       Let user train 2048 AI.
 ​       Usage: ./Train.out <train-round>
-​    3. replay.cpp $\Rightarrow $ Replay.out:
+​    3. replay.cpp → Replay.out:
 ​       Replay hightest score round when Training AI.
