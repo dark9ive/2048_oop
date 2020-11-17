@@ -260,29 +260,17 @@ void game::new_block(){		//	To maximum the efficiency, do &0x7 instead of mod 10
 
 void game::get_line_index(int* array){
 	int positive[8] = {0};
-	//int negative[8] = {0};
 	for(int a = 0; a < 4; a++){
 		positive[2] += (((board[a]>>(0*4))&0xF)<<(4*a));
 		positive[3] += (((board[a]>>(3*4))&0xF)<<(4*a));
 		positive[6] += (((board[a]>>(1*4))&0xF)<<(4*a));
 		positive[7] += (((board[a]>>(2*4))&0xF)<<(4*a));
-		/*
-		negative[0] += (((board[0]>>(4*a))&0xF)<<(4*(4-1-a)));
-		negative[1] += (((board[3]>>(4*a))&0xF)<<(4*(4-1-a)));
-		negative[4] += (((board[1]>>(4*a))&0xF)<<(4*(4-1-a)));
-		negative[5] += (((board[2]>>(4*a))&0xF)<<(4*(4-1-a)));
-		negative[2] += (((board[4-1-a]>>(0*4))&0xF)<<(4*a));
-		negative[3] += (((board[4-1-a]>>(3*4))&0xF)<<(4*a));
-		negative[6] += (((board[4-1-a]>>(1*4))&0xF)<<(4*a));
-		negative[7] += (((board[4-1-a]>>(2*4))&0xF)<<(4*a));
-		*/
 	}
 	positive[0] = board[0];
 	positive[1] = board[3];
 	positive[4] = board[1];
 	positive[5] = board[2];
 	for(int a = 0; a < 8; a++){
-		//array[a] = std::min(positive[a], negative[a]);
 		array[a] = positive[a];
 	}
 	return;

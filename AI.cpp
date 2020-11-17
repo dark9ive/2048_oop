@@ -153,6 +153,7 @@ void AI::save(){
 			std::cout << "File save error!" << std::endl;
 		}
 		for(int a = 0; a < top_history.size(); a++){
+			savefile(NULL, "./bin/highscore_replay.bin", 0);
 			if(!appendfile(top_history[a]->board_pointer(), "./bin/highscore_replay.bin", sizeof(int)*SIZE)){
 				std::cout << "File save error!" << std::endl;
 			}
