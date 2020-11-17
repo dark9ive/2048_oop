@@ -4,6 +4,8 @@
 #include <vector>
 #include <math.h>
 #include <climits>
+#include <sys/ioctl.h> //ioctl() and TIOCGWINSZ
+#include <unistd.h> // for STDOUT_FILENO
 #include "framework.h"
 #include "BoardPrint.h"
 #define SIZE 4
@@ -350,77 +352,96 @@ void game::get_box_index(int* array){
 
 void game::print()
 {
-    std::cout << "Points: " << points << std::endl;
-    for (int a = 0; a < SIZE; a++)
-    {
-        printf(frame_color);
-        std::cout << "------------";
-    }
-    std::cout << "--";
-    printf(clear_color);
-    std::cout << std::endl;
-    for (int a = 0; a < SIZE; a++)
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            for (int b = 0; b < SIZE; b++)
-            {
-                printf(frame_color);
-                std::cout << "||";
+	struct winsize size;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
+	for(int a = 0; a < (size.ws_row-27)/2; a++){
+		std::cout << std::endl;
+	}
+	if(points != 0){
+		for(int a = 0; a < (size.ws_col-(int)(8+log10(points)))/2; a++){
+			std::cout << " ";
+		}
+	}
+	else{
+		for(int a = 0; a < (size.ws_col-(int)(8+1))/2; a++){
+			std::cout << " ";
+		}
+	}
+	std::cout << "Points: " << points << std::endl << std::endl;
+	for(int a = 0; a < (size.ws_col-50)/2; a++){
+		std::cout << " ";
+	}
+	for (int a = 0; a < SIZE; a++)
+	{
+		printf(frame_color);
+		std::cout << "------------";
+	}
+	std::cout << "--";
+	printf(clear_color);
+	std::cout << std::endl;
+	for (int a = 0; a < SIZE; a++)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			for(int a = 0; a < (size.ws_col-50)/2; a++){
+				std::cout << " ";
+			}
+			for (int b = 0; b < SIZE; b++)
+			{
+				printf(frame_color);
+				std::cout << "||";
 				int two_power=((board[a] >> b * 4) & 0xF);
 				printf(num_color[two_power]);
-                std::cout << "          ";
-            }
-            printf(frame_color);
-            std::cout << "||";
-            printf(clear_color);
-            std::cout << std::endl;
-        }
-        for (int b = 0; b < SIZE; b++)
-        {
-            printf(frame_color);
-            std::cout << "||";
+				std::cout << "          ";
+			}
+			printf(frame_color);
+			std::cout << "||";
+			printf(clear_color);
+			std::cout << std::endl;
+		}
+		for(int a = 0; a < (size.ws_col-50)/2; a++){
+			std::cout << " ";
+		}
+		for (int b = 0; b < SIZE; b++)
+		{
+			printf(frame_color);
+			std::cout << "||";
 			int two_power=((board[a] >> b * 4) & 0xF);
 			printf(num_color[two_power]);
 			printf(num_characters[two_power]);
-        }
-        printf(frame_color);
-        std::cout << "||";
-        printf(clear_color);
-        std::cout << std::endl;
-        for (int i = 0; i < 2; i++)
-        {
-            for (int b = 0; b < SIZE; b++)
-            {
-                printf(frame_color);
-                std::cout << "||";
+		}
+		printf(frame_color);
+		std::cout << "||";
+		printf(clear_color);
+		std::cout << std::endl;
+		for (int i = 0; i < 2; i++)
+		{
+			for(int a = 0; a < (size.ws_col-50)/2; a++){
+				std::cout << " ";
+			}
+			for (int b = 0; b < SIZE; b++)
+			{
+				printf(frame_color);
+				std::cout << "||";
 				int two_power=((board[a] >> b * 4) & 0xF);
 				printf(num_color[two_power]);
-                std::cout << "          ";
-            }
-            printf(frame_color);
-            std::cout << "||";
-            printf(clear_color);
-            std::cout << std::endl;
-        }
-        if (a != SIZE - 1)
-        {
-            for (int b = 0; b < SIZE; b++)
-            {
-                printf(frame_color);
-                std::cout << "||----------";
-            }
-            std::cout << "||";
-            printf(clear_color);
-            std::cout << std::endl;
-        }
-    }
-    for (int a = 0; a < SIZE; a++)
-    {
-        printf(frame_color);
-        std::cout << "------------";
-    }
-    std::cout << "--";
-    printf(clear_color);
-    std::cout << std::endl;
+				std::cout << "          ";
+			}
+			printf(frame_color);
+			std::cout << "||";
+			printf(clear_color);
+			std::cout << std::endl;
+		}
+		for(int a = 0; a < (size.ws_col-50)/2; a++){
+			std::cout << " ";
+		}
+		for (int b = 0; b < SIZE; b++)
+		{
+			printf(frame_color);
+			std::cout << "||----------";
+		}
+		std::cout << "||";
+		printf(clear_color);
+		std::cout << std::endl;
+	}
 }
