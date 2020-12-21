@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <cstdio>
 #include <termios.h>
 #include <unistd.h>
 #include <assert.h>
