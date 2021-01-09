@@ -34,9 +34,9 @@ Explain each function and their features.
 
 ### prospects
 
-Game search tree, such as Alpha-Beta search / expetimax search.
-Zobrist hashing, epsilon-greedy policy.
-Deep Q learning.
+Game search tree, such as Alpha-Beta search / expetimax search.  
+Zobrist hashing, epsilon-greedy policy.  
+Deep Q learning.  
 
 ## References
 
