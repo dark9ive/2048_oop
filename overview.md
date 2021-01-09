@@ -32,6 +32,12 @@ Explain each function and their features.
 
 ### Results
 
+### prospects
+
+Game search tree, such as Alpha-Beta search / expetimax search.
+Zobrist hashing, epsilon-greedy policy.
+Deep Q learning.
+
 ## References
 
 ## Special thanks
