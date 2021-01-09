@@ -4,7 +4,7 @@
 #include<cfloat>
 #define SIZE 4
 #define LearningRate 0.01
-#define AI_MODE 7
+#define AI_MODE 1
 
 AI::AI(){
 	if(AI_MODE&7){
@@ -453,4 +453,13 @@ void AI::print_status(){
 	top_history.back()->print();
 	std::cout << "----------------------------------" << std::endl << std::endl;
 	return;
+}
+
+void AI::write_csv(){
+	std::fstream csv_log;
+	csv_log.open("./log.csv", std::ios::app);
+	csv_log << played << ", ";
+	csv_log << (double)total_points/(double)runtime_played << ", ";
+	csv_log << top_history.back()->show_points() << std::endl;
+	csv_log.close();
 }

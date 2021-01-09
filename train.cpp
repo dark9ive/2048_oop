@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 			if (a % 10000 == 0)
 			{
 				AI_player.print_status();
+				AI_player.write_csv();
 				AI_player.clear_status();
 			}
 		}

@@ -391,7 +391,7 @@ void game::print()
 				printf(frame_color);
 				std::cout << "||";
 				int two_power=((board[a] >> b * 4) & 0xF);
-				printf(num_color[two_power]);
+				printf("%s", num_color[two_power]);
 				std::cout << "          ";
 			}
 			printf(frame_color);
@@ -407,8 +407,8 @@ void game::print()
 			printf(frame_color);
 			std::cout << "||";
 			int two_power=((board[a] >> b * 4) & 0xF);
-			printf(num_color[two_power]);
-			printf(num_characters[two_power]);
+			printf("%s", num_color[two_power]);
+			printf("%s", num_characters[two_power]);
 		}
 		printf(frame_color);
 		std::cout << "||";
@@ -424,7 +424,7 @@ void game::print()
 				printf(frame_color);
 				std::cout << "||";
 				int two_power=((board[a] >> b * 4) & 0xF);
-				printf(num_color[two_power]);
+				printf("%s", num_color[two_power]);
 				std::cout << "          ";
 			}
 			printf(frame_color);

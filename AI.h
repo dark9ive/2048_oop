@@ -7,7 +7,6 @@ class AI{
 		std::vector<game*> curr_history;
 		std::vector<game*> top_history;
 		int played;
-		int top_played;		//	not used
 		int total_points = 0;
 		int runtime_played = 0;
 	private:			//	tuples
@@ -27,6 +26,7 @@ class AI{
 		void free_history(std::vector<game*>);
 		void update();
 		void clear_status();
+		void write_csv();
 	public:				//	get status
 		void print_status();
 		void print_board(game*);
