@@ -4,7 +4,7 @@
 #include<cfloat>
 #define SIZE 4
 #define LearningRate 0.01
-#define AI_MODE 1
+#define AI_MODE 5
 
 AI::AI(){
 	if(AI_MODE&7){
